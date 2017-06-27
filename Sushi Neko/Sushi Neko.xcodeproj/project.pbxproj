@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F52D6C71F02BC0A00280B4F /* assets-2.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 0F52D6C61F02BC0A00280B4F /* assets-2.atlas */; };
 		0F52D6C91F02BCD700280B4F /* SFX-2 in Resources */ = {isa = PBXBuildFile; fileRef = 0F52D6C81F02BCD700280B4F /* SFX-2 */; };
 		0F52D6CB1F02BD0F00280B4F /* MSButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52D6CA1F02BD0F00280B4F /* MSButtonNode.swift */; };
 		0F52D6CD1F02C0A100280B4F /* SushiPiece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52D6CC1F02C0A100280B4F /* SushiPiece.swift */; };
 		0F52D6CF1F02C40D00280B4F /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52D6CE1F02C40D00280B4F /* Character.swift */; };
+		0F89C9041F02F2B3002A45E9 /* AnimationActions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0F89C9031F02F2B3002A45E9 /* AnimationActions.sks */; };
+		0F89C9061F02F3B9002A45E9 /* sfx_swipe.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0F89C9051F02F3B9002A45E9 /* sfx_swipe.caf */; };
 		0FBAB6E21F02BB59008D587B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBAB6E11F02BB59008D587B /* AppDelegate.swift */; };
 		0FBAB6E41F02BB59008D587B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0FBAB6E31F02BB59008D587B /* GameScene.sks */; };
 		0FBAB6E61F02BB59008D587B /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0FBAB6E51F02BB59008D587B /* Actions.sks */; };
@@ -23,11 +24,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0F52D6C61F02BC0A00280B4F /* assets-2.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = "assets-2.atlas"; path = "Sushi Neko/assets-2.atlas"; sourceTree = "<group>"; };
 		0F52D6C81F02BCD700280B4F /* SFX-2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "SFX-2"; sourceTree = "<group>"; };
 		0F52D6CA1F02BD0F00280B4F /* MSButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSButtonNode.swift; sourceTree = "<group>"; };
 		0F52D6CC1F02C0A100280B4F /* SushiPiece.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SushiPiece.swift; sourceTree = "<group>"; };
 		0F52D6CE1F02C40D00280B4F /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		0F89C9031F02F2B3002A45E9 /* AnimationActions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = AnimationActions.sks; path = ../AnimationActions.sks; sourceTree = "<group>"; };
+		0F89C9051F02F3B9002A45E9 /* sfx_swipe.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = sfx_swipe.caf; path = "SFX-2/sfx_swipe.caf"; sourceTree = "<group>"; };
 		0FBAB6DE1F02BB59008D587B /* Sushi Neko.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sushi Neko.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FBAB6E11F02BB59008D587B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0FBAB6E31F02BB59008D587B /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -56,8 +58,8 @@
 			children = (
 				0FBAB6E01F02BB59008D587B /* Sushi Neko */,
 				0FBAB6DF1F02BB59008D587B /* Products */,
+				0F89C9051F02F3B9002A45E9 /* sfx_swipe.caf */,
 				0F52D6C81F02BCD700280B4F /* SFX-2 */,
-				0F52D6C61F02BC0A00280B4F /* assets-2.atlas */,
 			);
 			sourceTree = "<group>";
 		};
@@ -84,6 +86,7 @@
 				0FBAB6F01F02BB59008D587B /* LaunchScreen.storyboard */,
 				0FBAB6F31F02BB59008D587B /* Info.plist */,
 				0F52D6CA1F02BD0F00280B4F /* MSButtonNode.swift */,
+				0F89C9031F02F2B3002A45E9 /* AnimationActions.sks */,
 			);
 			path = "Sushi Neko";
 			sourceTree = "<group>";
@@ -150,9 +153,10 @@
 			files = (
 				0FBAB6ED1F02BB59008D587B /* Main.storyboard in Resources */,
 				0FBAB6E41F02BB59008D587B /* GameScene.sks in Resources */,
+				0F89C9041F02F2B3002A45E9 /* AnimationActions.sks in Resources */,
 				0FBAB6EF1F02BB59008D587B /* Assets.xcassets in Resources */,
-				0F52D6C71F02BC0A00280B4F /* assets-2.atlas in Resources */,
 				0FBAB6F21F02BB59008D587B /* LaunchScreen.storyboard in Resources */,
+				0F89C9061F02F3B9002A45E9 /* sfx_swipe.caf in Resources */,
 				0F52D6C91F02BCD700280B4F /* SFX-2 in Resources */,
 				0FBAB6E61F02BB59008D587B /* Actions.sks in Resources */,
 			);

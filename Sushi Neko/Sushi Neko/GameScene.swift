@@ -29,10 +29,45 @@ class GameScene: SKScene {
         
         // Set up chopsticks for the sushi base and adds it to the stack
         sushiBasePiece.connectChopsticks()
-        sushiTower.append(sushiBasePiece)
         
         // Test tower
-        addRandomPieces(total: 7)
+        addTowerPiece(side: .none)
+        addRandomPieces(total: 9)
+    }
+    
+    
+    // Called when a touch begins
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        // Isolates first touch
+        let touch = touches.first!
+        
+        // Gets the location of the first touch
+        let location = touch.location(in: self)
+        
+        // Calculates the side of the screen the touch was on, then moves the character to that side
+        if location.x > size.width / 2 {
+            character.side = .right
+        } else {
+            character.side = .left
+        }
+        
+        // Grab sushi piece on top of the base sushi piece, it will always be 'first'
+        if let firstPiece = sushiTower.first {
+            
+            // Remove from sushi tower array
+            sushiTower.removeFirst()
+            
+            // Animate the punched sushi piece
+            firstPiece.flip(character.side)
+            
+            // Add a new sushi piece to the top of the sushi tower
+            addRandomPieces(total: 1)
+        }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        moveTowerDown()
     }
     
     // Adds a new sushi on top of the sushi stack
@@ -109,20 +144,13 @@ class GameScene: SKScene {
         }
     }
     
-    // Called when a touch begins
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        // Isolates first touch
-        let touch = touches.first!
-        
-        // Gets the location of the first touch
-        let location = touch.location(in: self)
-        
-        // Calculates the side of the screen the touch was on, then moves the character to that side
-        if location.x > size.width / 2 {
-            character.side = .right
-        } else {
-            character.side = .left
+    // Moves sushi tower down after hit
+    func moveTowerDown() {
+        var n: CGFloat = 0
+        for piece in sushiTower {
+            let y = (n * 55) + 215
+            piece.position.y -= (piece.position.y - y) * 0.5
+            n += 1
         }
     }
 }
