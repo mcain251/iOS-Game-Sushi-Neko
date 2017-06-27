@@ -28,6 +28,21 @@ class GameScene: SKScene {
     var character: Character!
     var sushiTower: [SushiPiece] = []
     var playButton: MSButtonNode!
+    var scoreLabel: SKLabelNode!
+    var score: Int = 0 {
+        didSet {
+            scoreLabel.text = String(score)
+        }
+    }
+    var healthBar: SKSpriteNode!
+    var health: CGFloat = 1.0 {
+        didSet {
+            if health > 1.0 {
+                health = 1.0
+            }
+            healthBar.xScale = health
+        }
+    }
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
@@ -36,6 +51,8 @@ class GameScene: SKScene {
         sushiBasePiece = childNode(withName: "sushiBasePiece") as! SushiPiece
         character = childNode(withName: "character") as! Character
         playButton = childNode(withName: "playButton") as! MSButtonNode
+        scoreLabel = childNode(withName: "scoreLabel") as! SKLabelNode
+        healthBar = childNode(withName: "healthBar") as! SKSpriteNode
         
         // Set up chopsticks for the sushi base and adds it to the stack
         sushiBasePiece.connectChopsticks()
@@ -80,6 +97,13 @@ class GameScene: SKScene {
         // Grab sushi piece on top of the base sushi piece, it will always be 'first'
         if let firstPiece = sushiTower.first {
             
+            // Check if player has touched a chopstick
+            if state != .gameOver && character.side == sushiTower.first!.side {
+                state = .gameOver
+                gameOver()
+                return
+            }
+            
             // Remove from sushi tower array
             sushiTower.removeFirst()
             
@@ -88,17 +112,40 @@ class GameScene: SKScene {
             
             // Add a new sushi piece to the top of the sushi tower
             addRandomPieces(total: 1)
+            
+            // Lowers the sushis' z-positions
+            for piece in sushiTower {
+                piece.zPosition -= 1
+            }
+            
+            // Increment Health
+            health += 0.075
+            
+            // Increment Score
+            score += 1
         }
     }
     
     override func update(_ currentTime: TimeInterval) {
         moveTowerDown()
         
+        if state != .playing {
+            return
+        }
+        
+        // Decrease Health
+        health -= 0.01
+        
+        // Check if player ran out of health
+        if health <= 0 {
+            state = .gameOver
+            gameOver()
+        }
+        
         // Check if player has touched a chopstick
         if state != .gameOver && character.side == sushiTower.first!.side {
             state = .gameOver
             gameOver()
-            return
         }
     }
     
