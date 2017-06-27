@@ -18,22 +18,24 @@ enum GameState {
     case title, ready, playing, gameOver
 }
 
+// Game state
+var state: GameState = .title
+
 class GameScene: SKScene {
     
-    // Game state
-    var state: GameState = .title
-    
-    // Game objects
+    // Game objects and variables
     var sushiBasePiece: SushiPiece!
     var character: Character!
     var sushiTower: [SushiPiece] = []
     var playButton: MSButtonNode!
     var scoreLabel: SKLabelNode!
+    var highScoreLabel: SKLabelNode!
     var score: Int = 0 {
         didSet {
             scoreLabel.text = String(score)
         }
     }
+    var highScore = UserDefaults().integer(forKey: "HIGHSCORE")
     var healthBar: SKSpriteNode!
     var health: CGFloat = 1.0 {
         didSet {
@@ -44,6 +46,9 @@ class GameScene: SKScene {
         }
     }
     
+    // Death sound effect
+    let deathSound = SKAction.playSoundFileNamed("364929__josepharaoh99__game-die", waitForCompletion: false)
+    
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
@@ -53,6 +58,7 @@ class GameScene: SKScene {
         playButton = childNode(withName: "playButton") as! MSButtonNode
         scoreLabel = childNode(withName: "scoreLabel") as! SKLabelNode
         healthBar = childNode(withName: "healthBar") as! SKSpriteNode
+        highScoreLabel = childNode(withName: "highScoreLabel") as! SKLabelNode
         
         // Set up chopsticks for the sushi base and adds it to the stack
         sushiBasePiece.connectChopsticks()
@@ -65,7 +71,7 @@ class GameScene: SKScene {
         playButton.selectedHandler = {
             
             // Start game
-            self.state = .ready
+            state = .ready
         }
     }
     
@@ -128,10 +134,17 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         moveTowerDown()
+        highScoreLabel.text = "High: \(highScore)"
         
         if state != .playing {
+            if state == .ready {
+                playButton.state = .MSButtonNodeStateHidden
+            } else {
+                playButton.state = .MSButtonNodeStateActive
+            }
             return
         }
+        playButton.state = .MSButtonNodeStateHidden
         
         // Decrease Health
         health -= 0.01
@@ -146,6 +159,13 @@ class GameScene: SKScene {
         if state != .gameOver && character.side == sushiTower.first!.side {
             state = .gameOver
             gameOver()
+        }
+        
+        // Updates and displays the high score
+        if score > highScore {
+            UserDefaults.standard.set(score, forKey: "HIGHSCORE")
+            highScore = UserDefaults().integer(forKey: "HIGHSCORE")
+            highScoreLabel.text = "High: \(highScore)"
         }
     }
     
@@ -236,6 +256,9 @@ class GameScene: SKScene {
     // Called when player loses
     func gameOver() {
         
+        // Play sound effect
+        run(deathSound)
+        
         // Have the sushi fall in random directions
         for _ in sushiTower {
             if let firstPiece = sushiTower.first {
@@ -258,6 +281,9 @@ class GameScene: SKScene {
         
         // Change play button selection handler
         playButton.selectedHandler = {
+            
+            // Makes the game ready to play again
+            state = .ready
             
             // Grab reference to the SpriteKit view
             let skView = self.view as SKView!
