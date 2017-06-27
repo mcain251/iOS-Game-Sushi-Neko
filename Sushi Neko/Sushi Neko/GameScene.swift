@@ -13,12 +13,21 @@ enum Side {
     case left, right, none
 }
 
+// Track game state
+enum GameState {
+    case title, ready, playing, gameOver
+}
+
 class GameScene: SKScene {
+    
+    // Game state
+    var state: GameState = .title
     
     // Game objects
     var sushiBasePiece: SushiPiece!
     var character: Character!
     var sushiTower: [SushiPiece] = []
+    var playButton: MSButtonNode!
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
@@ -26,18 +35,34 @@ class GameScene: SKScene {
         // Set reference to game objects
         sushiBasePiece = childNode(withName: "sushiBasePiece") as! SushiPiece
         character = childNode(withName: "character") as! Character
+        playButton = childNode(withName: "playButton") as! MSButtonNode
         
         // Set up chopsticks for the sushi base and adds it to the stack
         sushiBasePiece.connectChopsticks()
         
-        // Test tower
+        // Set up sushi tower
         addTowerPiece(side: .none)
         addRandomPieces(total: 9)
+        
+        // Play button functionality
+        playButton.selectedHandler = {
+            
+            // Start game
+            self.state = .ready
+        }
     }
     
     
     // Called when a touch begins
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        // Check that game is ready
+        if state == .gameOver || state == .title { return }
+        
+        // Game begins on first touch
+        if state == .ready {
+            state = .playing
+        }
         
         // Isolates first touch
         let touch = touches.first!
@@ -68,6 +93,13 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         moveTowerDown()
+        
+        // Check if player has touched a chopstick
+        if state != .gameOver && character.side == sushiTower.first!.side {
+            state = .gameOver
+            gameOver()
+            return
+        }
     }
     
     // Adds a new sushi on top of the sushi stack
@@ -151,6 +183,48 @@ class GameScene: SKScene {
             let y = (n * 55) + 215
             piece.position.y -= (piece.position.y - y) * 0.5
             n += 1
+        }
+    }
+    
+    // Called when player loses
+    func gameOver() {
+        
+        // Have the sushi fall in random directions
+        for _ in sushiTower {
+            if let firstPiece = sushiTower.first {
+                sushiTower.removeFirst()
+                let rand = arc4random_uniform(2)
+                if rand == 1 {
+                    firstPiece.fall(.right)
+                }
+                else{
+                    firstPiece.fall(.left)
+                }
+            }
+        }
+        
+        // Make the base fall
+        sushiBasePiece.fall(character.side)
+        
+        // Make the player turn red
+        character.run(SKAction.colorize(with: UIColor.red, colorBlendFactor: 1.0, duration: 0.50))
+        
+        // Change play button selection handler
+        playButton.selectedHandler = {
+            
+            // Grab reference to the SpriteKit view
+            let skView = self.view as SKView!
+            
+            // Load Game scene
+            guard let scene = GameScene(fileNamed:"GameScene") as GameScene! else {
+                return
+            }
+            
+            // Ensure correct aspect mode
+            scene.scaleMode = .aspectFill
+            
+            // Restart GameScene
+            skView?.presentScene(scene)
         }
     }
 }
