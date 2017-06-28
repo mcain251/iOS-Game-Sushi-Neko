@@ -23,6 +23,9 @@ var state: GameState = .title
 
 class GameScene: SKScene {
     
+    // How much health is regained on each tap
+    let healthGained: CGFloat = 0.125
+    
     // Game objects and variables
     var sushiBasePiece: SushiPiece!
     var character: Character!
@@ -125,7 +128,7 @@ class GameScene: SKScene {
             }
             
             // Increment Health
-            health += 0.075
+            health += healthGained
             
             // Increment Score
             score += 1
