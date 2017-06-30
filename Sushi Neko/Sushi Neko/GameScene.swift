@@ -21,6 +21,8 @@ enum GameState {
 // Game state
 var state: GameState = .title
 
+var moved = false
+
 class GameScene: SKScene {
     
     // How much health is regained on each tap
@@ -33,6 +35,8 @@ class GameScene: SKScene {
     var playButton: MSButtonNode!
     var scoreLabel: SKLabelNode!
     var highScoreLabel: SKLabelNode!
+    var titleLabel: SKLabelNode!
+    var mat: SKSpriteNode!
     var score: Int = 0 {
         didSet {
             scoreLabel.text = String(score)
@@ -62,6 +66,8 @@ class GameScene: SKScene {
         scoreLabel = childNode(withName: "scoreLabel") as! SKLabelNode
         healthBar = childNode(withName: "healthBar") as! SKSpriteNode
         highScoreLabel = childNode(withName: "highScoreLabel") as! SKLabelNode
+        titleLabel = childNode(withName: "titleLabel") as! SKLabelNode
+        mat = childNode(withName: "mat") as! SKSpriteNode
         
         // Set up chopsticks for the sushi base and adds it to the stack
         sushiBasePiece.connectChopsticks()
@@ -72,6 +78,11 @@ class GameScene: SKScene {
         
         // Play button functionality
         playButton.selectedHandler = {
+            
+            // Move menu mat
+            if !moved {
+                self.mat.run(SKAction(named: "Rise")!)
+            }
             
             // Start game
             state = .ready
@@ -142,12 +153,29 @@ class GameScene: SKScene {
         if state != .playing {
             if state == .ready {
                 playButton.state = .MSButtonNodeStateHidden
+                scoreLabel.isHidden = false
+                highScoreLabel.isHidden = false
+                titleLabel.isHidden = true
+                if moved {
+                    mat.isHidden = true
+                }
             } else {
                 playButton.state = .MSButtonNodeStateActive
+            }
+            if state == .title {
+                scoreLabel.isHidden = true
+                highScoreLabel.isHidden = true
+                titleLabel.isHidden = false
+            }
+            if state == .gameOver {
+                moved = true
             }
             return
         }
         playButton.state = .MSButtonNodeStateHidden
+        scoreLabel.isHidden = false
+        highScoreLabel.isHidden = false
+        titleLabel.isHidden = true
         
         // Decrease Health
         health -= 0.01

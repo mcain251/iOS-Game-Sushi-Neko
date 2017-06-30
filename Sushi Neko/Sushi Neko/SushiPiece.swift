@@ -71,6 +71,9 @@ class SushiPiece: SKSpriteNode {
         // Create a node removal action
         let remove = SKAction.removeFromParent()
         
+        // Changes the roll's z-position so it is below the next one
+        zPosition = -1
+        
         // Build sequence, flip then remove from scene
         let sequence = SKAction.sequence([flip,remove])
         run(sequence)
